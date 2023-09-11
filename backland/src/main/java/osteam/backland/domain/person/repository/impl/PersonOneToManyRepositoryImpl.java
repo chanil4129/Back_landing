@@ -21,7 +21,7 @@ public class PersonOneToManyRepositoryImpl implements PersonOneToManyRepositoryC
         List<PersonOneToMany> results = jpaQueryFactory
                 .selectFrom(personOneToMany)
                 .join(personOneToMany.phoneOneToMany, phoneOneToMany)
-                .where(phoneOneToMany.phone.eq(phone))
+                .where(phoneOneToMany.phone.like("%" + phone + "%"))
                 .fetch();
         return new HashSet<>(results);
     }
