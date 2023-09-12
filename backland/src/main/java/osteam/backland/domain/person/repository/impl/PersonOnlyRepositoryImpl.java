@@ -16,7 +16,7 @@ public class PersonOnlyRepositoryImpl implements PersonOnlyRepositoryCustom {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public Set<PersonOnly> serachByName(String name) {
+    public Set<PersonOnly> searchByName(String name) {
         List<PersonOnly> result= jpaQueryFactory
                 .selectFrom(personOnly)
                 .where(personOnly.name.like("%" + name + "%"))

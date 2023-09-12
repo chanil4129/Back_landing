@@ -9,6 +9,7 @@ import lombok.Setter;
 import osteam.backland.domain.phone.entity.PhoneOneToMany;
 import osteam.backland.global.entity.PrimaryKeyEntity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -24,6 +25,10 @@ public class PersonOneToMany extends PrimaryKeyEntity {
             cascade = CascadeType.ALL,
             fetch = FetchType.LAZY
     )
-    private List<PhoneOneToMany> phoneOneToMany;
+    private List<PhoneOneToMany> phoneOneToMany=new ArrayList<>();
 
+    public void addPhoneOneToMany(PhoneOneToMany phoneOTM) {
+        phoneOneToMany.add(phoneOTM);
+        phoneOTM.setPersonOneToMany(this);
+    }
 }
