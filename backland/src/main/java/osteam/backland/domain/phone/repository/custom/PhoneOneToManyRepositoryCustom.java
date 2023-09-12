@@ -5,5 +5,5 @@ import osteam.backland.domain.phone.entity.PhoneOneToMany;
 import java.util.Set;
 
 public interface PhoneOneToManyRepositoryCustom {
-    Set<PhoneOneToMany> searchByName(String name);
+    Set<PhoneOneToMany> searchByNameContaining(String name);
 }

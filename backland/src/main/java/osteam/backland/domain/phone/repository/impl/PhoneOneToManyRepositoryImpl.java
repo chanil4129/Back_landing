@@ -17,7 +17,7 @@ public class PhoneOneToManyRepositoryImpl implements PhoneOneToManyRepositoryCus
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public Set<PhoneOneToMany> searchByName(String name) {
+    public Set<PhoneOneToMany> searchByNameContaining(String name) {
         List<PhoneOneToMany> results = jpaQueryFactory
                 .selectFrom(phoneOneToMany)
                 .join(phoneOneToMany.personOneToMany, personOneToMany)

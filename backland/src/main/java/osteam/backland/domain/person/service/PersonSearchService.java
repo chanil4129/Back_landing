@@ -66,8 +66,8 @@ public class PersonSearchService {
     }
 
     //**이름 찾기**//
-    public Set<PersonDTO> searchPersonOnlyByName(String name) {
-        Set<PersonOnly> personOnlies = personOnlyRepository.searhByName(name);
+    public Set<PersonDTO> searchPersonOnlyByNameContaining(String name) {
+        Set<PersonOnly> personOnlies = personOnlyRepository.searchByNameContaining(name);
 
         return personOnlies.stream()
                 .map(person -> {
@@ -79,8 +79,8 @@ public class PersonSearchService {
                 .collect(Collectors.toSet());
     }
 
-    public Set<PersonDTO> searchPersonOneToOneByName(String name) {
-        Set<PhoneOneToOne> phoneOneToOnes = phoneOneToOneRepository.searchByName(name);
+    public Set<PersonDTO> searchPersonOneToOneByNameContaining(String name) {
+        Set<PhoneOneToOne> phoneOneToOnes = phoneOneToOneRepository.searchByNameContaining(name);
 
         return phoneOneToOnes.stream()
                 .map(phone -> {
@@ -92,8 +92,8 @@ public class PersonSearchService {
                 .collect(Collectors.toSet());
     }
 
-    public Set<PersonOneToManyDTO> searchPersonOneToManyByName(String name){
-        Set<PersonOneToMany> persons = phoneOneToManyRepository.searchByName(name)
+    public Set<PersonOneToManyDTO> searchPersonOneToManyByNameContaining(String name){
+        Set<PersonOneToMany> persons = phoneOneToManyRepository.searchByNameContaining(name)
                 .stream()
                 .map(PhoneOneToMany::getPersonOneToMany)
                 .collect(Collectors.toSet());
@@ -115,8 +115,8 @@ public class PersonSearchService {
     }
 
     //**번호로 찾기**
-    public Set<PersonDTO> searchPhonePersonOnly(String phone) {
-        Set<PersonOnly> personOnlies = personOnlyRepository.searchByPhone(phone);
+    public Set<PersonDTO> searchPhonePersonOnlyContaining(String phone) {
+        Set<PersonOnly> personOnlies = personOnlyRepository.searchByPhoneContaining(phone);
 
         return personOnlies.stream()
                 .map(person -> {
@@ -128,8 +128,8 @@ public class PersonSearchService {
                 .collect(Collectors.toSet());
     }
 
-    public Set<PersonDTO> searchPersonOneToOneByPhone(String phone) {
-        Set<PersonOneToOne> personOneToOnes = personOneToOneRepository.searchByPhone(phone);
+    public Set<PersonDTO> searchPersonOneToOneByPhoneContaining(String phone) {
+        Set<PersonOneToOne> personOneToOnes = personOneToOneRepository.searchByPhoneContaining(phone);
 
         return personOneToOnes.stream()
                 .map(person -> {
@@ -141,8 +141,8 @@ public class PersonSearchService {
                 .collect(Collectors.toSet());
     }
 
-    public Set<PersonOneToManyDTO> searchPersonOneToManyByPhone(String phone){
-        Set<PersonOneToMany> personOneToManies = personOneToManyRepository.searchByPhone(phone);
+    public Set<PersonOneToManyDTO> searchPersonOneToManyByPhoneContaining(String phone){
+        Set<PersonOneToMany> personOneToManies = personOneToManyRepository.searchByPhoneContaining(phone);
 
         return getPersonOneToManyDTOS(personOneToManies.stream(), personOneToManies);
     }

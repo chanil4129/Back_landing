@@ -17,12 +17,21 @@ public class PersonOneToOneRepositoryImpl implements PersonOneToOneRepositoryCus
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public Set<PersonOneToOne> searchByPhone(String phone) {
+    public Set<PersonOneToOne> searchByPhoneContaining(String phone) {
         List<PersonOneToOne> results = jpaQueryFactory
                 .selectFrom(personOneToOne)
                 .join(personOneToOne.phoneOneToOne, phoneOneToOne)
                 .where(phoneOneToOne.phone.like("%" + phone + "%"))
                 .fetch();
         return new HashSet<>(results);
+    }
+
+    @Override
+    public PersonOneToOne searchByPhone(String phone) {
+        return jpaQueryFactory
+                .selectFrom(personOneToOne)
+                .join(personOneToOne.personOneToOne,personOneToOne)
+                .where(phoneOneToOne.phone.eq(phone))
+                .fetchOne();
     }
 }

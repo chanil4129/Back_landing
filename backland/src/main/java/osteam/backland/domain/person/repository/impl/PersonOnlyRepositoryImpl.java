@@ -16,7 +16,7 @@ public class PersonOnlyRepositoryImpl implements PersonOnlyRepositoryCustom {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public Set<PersonOnly> searchByName(String name) {
+    public Set<PersonOnly> searchByNameContaining(String name) {
         List<PersonOnly> result= jpaQueryFactory
                 .selectFrom(personOnly)
                 .where(personOnly.name.like("%" + name + "%"))
@@ -25,11 +25,19 @@ public class PersonOnlyRepositoryImpl implements PersonOnlyRepositoryCustom {
     }
 
     @Override
-    public Set<PersonOnly> searchByPhone(String phone) {
+    public Set<PersonOnly> searchByPhoneContaining(String phone) {
         List<PersonOnly> result = jpaQueryFactory
                 .selectFrom(personOnly)
                 .where(personOnly.phone.like("%" + phone + "%"))
                 .fetch();
         return new HashSet<>(result);
+    }
+
+    @Override
+    public PersonOnly searchByPhone(String phone) {
+        return jpaQueryFactory
+                .selectFrom(personOnly)
+                .where(personOnly.phone.eq(phone))
+                .fetchOne();
     }
 }

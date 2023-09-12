@@ -17,7 +17,7 @@ public class PhoneOneToOneRepositoryImpl implements PhoneOneToOneRepositoryCusto
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public Set<PhoneOneToOne> searchByName(String name) {
+    public Set<PhoneOneToOne> searchByNameContaining(String name) {
         List<PhoneOneToOne> results = jpaQueryFactory
                 .selectFrom(phoneOneToOne)
                 .join(phoneOneToOne.personOneToOne, personOneToOne)

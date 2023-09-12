@@ -7,16 +7,13 @@ import osteam.backland.domain.person.entity.PersonOneToMany;
 import osteam.backland.domain.person.entity.PersonOneToOne;
 import osteam.backland.domain.person.entity.PersonOnly;
 import osteam.backland.domain.person.entity.dto.PersonDTO;
-import osteam.backland.domain.person.entity.dto.PersonOneToManyDTO;
-import osteam.backland.domain.person.exception.DuplicatePhoneException;
 import osteam.backland.domain.person.repository.PersonOneToManyRepository;
 import osteam.backland.domain.person.repository.PersonOneToOneRepository;
 import osteam.backland.domain.person.repository.PersonOnlyRepository;
 import osteam.backland.domain.phone.entity.PhoneOneToMany;
 import osteam.backland.domain.phone.entity.PhoneOneToOne;
-
-import java.util.Set;
-import java.util.function.Function;
+import osteam.backland.domain.phone.repository.PhoneOneToManyRepository;
+import osteam.backland.domain.phone.repository.PhoneOneToOneRepository;
 
 @Service
 @Slf4j
@@ -25,7 +22,8 @@ public class PersonCreateService {
     private final PersonOnlyRepository personOnlyRepository;
     private final PersonOneToOneRepository personOneToOneRepository;
     private final PersonOneToManyRepository personOneToManyRepository;
-    private final PersonSearchService personSearchService;
+    private final PhoneOneToOneRepository phoneOneToOneRepository;
+    private final PhoneOneToManyRepository phoneOneToManyRepository;
 
     public PersonDTO createAll(String name, String phone) {
         one(name, phone);
@@ -82,27 +80,14 @@ public class PersonCreateService {
     }
 
     private void isValidPersonOnly(String phone){
-        Set<PersonDTO> personDTOS = personSearchService.searchPhonePersonOnly(phone);
-        isValid(phone, personDTOS, PersonDTO::getPhone);
+
     }
 
     private void isValidPersonOneToOne(String phone) {
-        Set<PersonDTO> personDTOS = personSearchService.searchPersonOneToOneByPhone(phone);
-        isValid(phone, personDTOS, PersonDTO::getPhone);
     }
 
     private void isValidPersonOneToMany(String phone) {
-        Set<PersonOneToManyDTO> personDTOS = personSearchService.searchPersonOneToManyByPhone(phone);
-        if (personDTOS.stream()
-                .flatMap(dto -> dto.getPhone().stream())
-                .anyMatch(storedPhone -> storedPhone.equals(phone))) {
-            throw new DuplicatePhoneException();
-        }
     }
 
-    private <T> void isValid(String phone, Set<T> personDTOs, Function<T, String> phoneExtractor) {
-        if (personDTOs.stream().anyMatch(dto -> phoneExtractor.apply(dto).equals(phone))) {
-            throw new DuplicatePhoneException();
-        }
-    }
+
 }
