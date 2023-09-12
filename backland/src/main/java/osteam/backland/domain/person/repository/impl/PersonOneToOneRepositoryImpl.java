@@ -7,6 +7,7 @@ import osteam.backland.domain.person.repository.custom.PersonOneToOneRepositoryC
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import static osteam.backland.domain.person.entity.QPersonOneToOne.personOneToOne;
@@ -27,11 +28,22 @@ public class PersonOneToOneRepositoryImpl implements PersonOneToOneRepositoryCus
     }
 
     @Override
-    public PersonOneToOne searchByPhone(String phone) {
-        return jpaQueryFactory
+    public Optional<PersonOneToOne> searchByPhone(String phone) {
+        PersonOneToOne result = jpaQueryFactory
                 .selectFrom(personOneToOne)
-                .join(personOneToOne.personOneToOne,personOneToOne)
+                .join(personOneToOne.personOneToOne, personOneToOne)
                 .where(phoneOneToOne.phone.eq(phone))
                 .fetchOne();
+
+        return Optional.ofNullable(result);
+    }
+
+    @Override
+    public Long updateName(String phone, String newName) {
+        return jpaQueryFactory
+                .update(personOneToOne)
+                .set(personOneToOne.name, newName)
+                .where(personOneToOne.phoneOneToOne.phone.eq(phone))
+                .execute();
     }
 }

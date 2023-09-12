@@ -12,8 +12,6 @@ import osteam.backland.domain.person.repository.PersonOneToOneRepository;
 import osteam.backland.domain.person.repository.PersonOnlyRepository;
 import osteam.backland.domain.phone.entity.PhoneOneToMany;
 import osteam.backland.domain.phone.entity.PhoneOneToOne;
-import osteam.backland.domain.phone.repository.PhoneOneToManyRepository;
-import osteam.backland.domain.phone.repository.PhoneOneToOneRepository;
 
 @Service
 @Slf4j
@@ -22,8 +20,6 @@ public class PersonCreateService {
     private final PersonOnlyRepository personOnlyRepository;
     private final PersonOneToOneRepository personOneToOneRepository;
     private final PersonOneToManyRepository personOneToManyRepository;
-    private final PhoneOneToOneRepository phoneOneToOneRepository;
-    private final PhoneOneToManyRepository phoneOneToManyRepository;
 
     public PersonDTO createAll(String name, String phone) {
         one(name, phone);
@@ -37,8 +33,7 @@ public class PersonCreateService {
      * Phone과 OneToOne 관계인 person 생성
      */
     public PersonDTO oneToOne(String name, String phone) {
-        isValidPersonOneToOne(phone);
-
+        log.debug("OneToOne 등록");
         PersonOneToOne personOneToOne = new PersonOneToOne();
         personOneToOne.setName(name);
         PhoneOneToOne phoneOneToOne = new PhoneOneToOne();
@@ -53,8 +48,7 @@ public class PersonCreateService {
      * Phone과 OneToMany 관계인 person 생성
      */
     public PersonDTO oneToMany(String name, String phone) {
-        isValidPersonOneToMany(phone);
-
+        log.debug("OneToMany 등록");
         PersonOneToMany personOneToMany = new PersonOneToMany();
         personOneToMany.setName(name);
         PhoneOneToMany phoneOneToMany = new PhoneOneToMany();
@@ -69,8 +63,7 @@ public class PersonCreateService {
      * person 하나로만 구성되어 있는 생성
      */
     public PersonDTO one(String name, String phone) {
-        isValidPersonOnly(phone);
-
+        log.debug("One 등록");
         PersonOnly personOnly = new PersonOnly();
         personOnly.setName(name);
         personOnly.setPhone(phone);
@@ -78,16 +71,4 @@ public class PersonCreateService {
 
         return new PersonDTO(name,phone);
     }
-
-    private void isValidPersonOnly(String phone){
-
-    }
-
-    private void isValidPersonOneToOne(String phone) {
-    }
-
-    private void isValidPersonOneToMany(String phone) {
-    }
-
-
 }
