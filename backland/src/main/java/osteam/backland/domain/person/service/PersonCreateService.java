@@ -28,11 +28,6 @@ public class PersonCreateService {
     private final PersonSearchService personSearchService;
 
     public PersonDTO createAll(String name, String phone) {
-        // 중복 체크
-        isValidPersonOnly(phone);
-        isValidPersonOneToOne(phone);
-        isValidPersonOneToMany(phone);
-
         one(name, phone);
         oneToOne(name, phone);
         oneToMany(name, phone);
