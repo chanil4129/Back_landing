@@ -33,24 +33,9 @@ public class PersonCreateService {
         isValidPersonOneToOne(phone);
         isValidPersonOneToMany(phone);
 
-        PersonOnly personOnly = new PersonOnly();
-        personOnly.setName(name);
-        personOnly.setPhone(phone);
-        personOnlyRepository.save(personOnly);
-
-        PersonOneToOne personOneToOne = new PersonOneToOne();
-        personOneToOne.setName(name);
-        PhoneOneToOne phoneOneToOne = new PhoneOneToOne();
-        phoneOneToOne.setPhone(phone);
-        personOneToOne.updatePhoneOneToOne(phoneOneToOne);
-        personOneToOneRepository.save(personOneToOne);
-
-        PersonOneToMany personOneToMany = new PersonOneToMany();
-        personOneToMany.setName(name);
-        PhoneOneToMany phoneOneToMany = new PhoneOneToMany();
-        phoneOneToMany.setPhone(phone);
-        personOneToMany.addPhoneOneToMany(phoneOneToMany);
-        personOneToManyRepository.save(personOneToMany);
+        one(name, phone);
+        oneToOne(name, phone);
+        oneToMany(name, phone);
 
         return new PersonDTO(name,phone);
     }
