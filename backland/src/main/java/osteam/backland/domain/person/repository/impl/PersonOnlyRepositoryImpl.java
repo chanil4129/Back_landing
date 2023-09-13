@@ -18,7 +18,7 @@ public class PersonOnlyRepositoryImpl implements PersonOnlyRepositoryCustom {
 
     @Override
     public Set<PersonOnly> searchByNameContaining(String name) {
-        List<PersonOnly> result= jpaQueryFactory
+        List<PersonOnly> result = jpaQueryFactory
                 .selectFrom(personOnly)
                 .where(personOnly.name.like("%" + name + "%"))
                 .fetch();
@@ -45,8 +45,8 @@ public class PersonOnlyRepositoryImpl implements PersonOnlyRepositoryCustom {
     }
 
     @Override
-    public Long updateName(String phone, String newName) {
-        return jpaQueryFactory
+    public void updateName(String phone, String newName) {
+        jpaQueryFactory
                 .update(personOnly)
                 .set(personOnly.name, newName)
                 .where(personOnly.phone.eq(phone))

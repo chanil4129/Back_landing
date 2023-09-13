@@ -3,6 +3,7 @@ package osteam.backland.domain.person.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import osteam.backland.domain.person.entity.dto.PersonDTO;
 import osteam.backland.domain.person.repository.PersonOneToManyRepository;
 import osteam.backland.domain.person.repository.PersonOneToOneRepository;
@@ -11,20 +12,21 @@ import osteam.backland.domain.person.repository.PersonOnlyRepository;
 @Service
 @Slf4j
 @RequiredArgsConstructor
+@Transactional
 public class PersonUpdateService {
     private final PersonOnlyRepository personOnlyRepository;
     private final PersonOneToOneRepository personOneToOneRepository;
     private final PersonOneToManyRepository personOneToManyRepository;
 
-    public void updatePersonOnlyByName(PersonDTO personDTO, String newName) {
-        personOnlyRepository.updateName(personDTO.getPhone(), newName);
+    public void updateNamePersonOnly(PersonDTO personDTO) {
+        personOnlyRepository.updateName(personDTO.getPhone(), personDTO.getName());
     }
 
-    public void updatePersonOneToOne(PersonDTO personDTO, String newName) {
-        personOneToOneRepository.updateName(personDTO.getPhone(), newName);
+    public void updateNamePersonOneToOne(PersonDTO personDTO) {
+        personOneToOneRepository.updateName(personDTO.getPhone(), personDTO.getName());
     }
 
-    public void updatePersonOneToMany(PersonDTO personDTO, String newName) {
-        personOneToManyRepository.updateName((personDTO.getPhone()), newName);
+    public void updateNamePersonOneToMany(PersonDTO personDTO) {
+        personOneToManyRepository.updateName((personDTO.getPhone()), personDTO.getName());
     }
 }

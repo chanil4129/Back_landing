@@ -27,6 +27,7 @@ public class ValidCheckService {
     public Optional<PersonDTO> duplicatePersonOnly(String phone) {
         Optional<PersonOnly> person = personOnlyRepository.searchByPhone(phone);
         if (person.isPresent()) {
+            log.debug("DuplicatePersonOnly");
             PersonDTO dto = new PersonDTO();
             dto.setName(person.get().getName());
             dto.setPhone(person.get().getPhone());
@@ -38,6 +39,7 @@ public class ValidCheckService {
     public Optional<PersonDTO> duplicatePersonOneToOne(String phone) {
         Optional<PersonOneToOne> person = personOneToOneRepository.searchByPhone(phone);
         if (person.isPresent()) {
+            log.debug("DuplicatePersonOneToOne");
             PersonDTO dto = new PersonDTO();
             dto.setName(person.get().getName());
             dto.setPhone(person.get().getPhoneOneToOne().getPhone());
@@ -49,6 +51,7 @@ public class ValidCheckService {
     public Optional<PersonOneToManyDTO> duplicatePersonOneToMany(String phone) {
         Optional<PersonOneToMany> person = personOneToManyRepository.searchByPhone(phone);
         if (person.isPresent()) {
+            log.debug("DuplicatePersonOneToMany");
             PersonOneToManyDTO dto = new PersonOneToManyDTO();
             dto.setName(person.get().getName());
             dto.setPhone(person.get().getPhoneOneToMany()
@@ -56,6 +59,7 @@ public class ValidCheckService {
                     .map(PhoneOneToMany::getPhone)
                     .collect(Collectors.toList())
             );
+            return Optional.of(dto);
         }
         return Optional.empty();
     }

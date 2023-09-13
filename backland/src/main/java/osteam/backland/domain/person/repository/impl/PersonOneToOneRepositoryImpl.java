@@ -5,10 +5,7 @@ import lombok.RequiredArgsConstructor;
 import osteam.backland.domain.person.entity.PersonOneToOne;
 import osteam.backland.domain.person.repository.custom.PersonOneToOneRepositoryCustom;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 import static osteam.backland.domain.person.entity.QPersonOneToOne.personOneToOne;
 import static osteam.backland.domain.phone.entity.QPhoneOneToOne.phoneOneToOne;
@@ -31,7 +28,7 @@ public class PersonOneToOneRepositoryImpl implements PersonOneToOneRepositoryCus
     public Optional<PersonOneToOne> searchByPhone(String phone) {
         PersonOneToOne result = jpaQueryFactory
                 .selectFrom(personOneToOne)
-                .join(personOneToOne.personOneToOne, personOneToOne)
+                .join(personOneToOne.phoneOneToOne, phoneOneToOne)
                 .where(phoneOneToOne.phone.eq(phone))
                 .fetchOne();
 
@@ -39,11 +36,24 @@ public class PersonOneToOneRepositoryImpl implements PersonOneToOneRepositoryCus
     }
 
     @Override
-    public Long updateName(String phone, String newName) {
-        return jpaQueryFactory
-                .update(personOneToOne)
-                .set(personOneToOne.name, newName)
-                .where(personOneToOne.phoneOneToOne.phone.eq(phone))
-                .execute();
+    public void updateName(String phone, String newName) {
+        UUID personId = jpaQueryFactory
+                .select(phoneOneToOne.personOneToOne.id)
+                .from(phoneOneToOne)
+                .where(phoneOneToOne.phone.eq(phone))
+                .fetchOne();
+
+        if (personId != null) {
+            jpaQueryFactory
+                    .update(personOneToOne)
+                    .set(personOneToOne.name, newName)
+                    .where(personOneToOne.id.eq(personId))
+                    .execute();
+        }
+//        jpaQueryFactory
+//                .update(personOneToOne)
+//                .set(personOneToOne.name, newName)
+//                .where(personOneToOne.phoneOneToOne.phone.eq(phone))
+//                .execute();
     }
 }

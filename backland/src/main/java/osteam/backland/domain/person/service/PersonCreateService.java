@@ -21,54 +21,54 @@ public class PersonCreateService {
     private final PersonOneToOneRepository personOneToOneRepository;
     private final PersonOneToManyRepository personOneToManyRepository;
 
-    public PersonDTO createAll(String name, String phone) {
-        one(name, phone);
-        oneToOne(name, phone);
-        oneToMany(name, phone);
+    public PersonDTO createAll(PersonDTO personDTO) {
+        one(personDTO);
+        oneToOne(personDTO);
+        oneToMany(personDTO);
 
-        return new PersonDTO(name,phone);
+        return personDTO;
     }
 
     /**
      * Phone과 OneToOne 관계인 person 생성
      */
-    public PersonDTO oneToOne(String name, String phone) {
+    public PersonDTO oneToOne(PersonDTO personDTO) {
         log.debug("OneToOne 등록");
         PersonOneToOne personOneToOne = new PersonOneToOne();
-        personOneToOne.setName(name);
+        personOneToOne.setName(personDTO.getName());
         PhoneOneToOne phoneOneToOne = new PhoneOneToOne();
-        phoneOneToOne.setPhone(phone);
+        phoneOneToOne.setPhone(personDTO.getPhone());
         personOneToOne.updatePhoneOneToOne(phoneOneToOne);
         personOneToOneRepository.save(personOneToOne);
 
-        return new PersonDTO(name,phone);
+        return new PersonDTO(personDTO.getName(),personDTO.getPhone());
     }
 
     /**
      * Phone과 OneToMany 관계인 person 생성
      */
-    public PersonDTO oneToMany(String name, String phone) {
+    public PersonDTO oneToMany(PersonDTO personDTO) {
         log.debug("OneToMany 등록");
         PersonOneToMany personOneToMany = new PersonOneToMany();
-        personOneToMany.setName(name);
+        personOneToMany.setName(personDTO.getName());
         PhoneOneToMany phoneOneToMany = new PhoneOneToMany();
-        phoneOneToMany.setPhone(phone);
+        phoneOneToMany.setPhone(personDTO.getPhone());
         personOneToMany.addPhoneOneToMany(phoneOneToMany);
         personOneToManyRepository.save(personOneToMany);
 
-        return new PersonDTO(name,phone);
+        return new PersonDTO(personDTO.getName(),personDTO.getPhone());
     }
 
     /**
      * person 하나로만 구성되어 있는 생성
      */
-    public PersonDTO one(String name, String phone) {
+    public PersonDTO one(PersonDTO personDTO) {
         log.debug("One 등록");
         PersonOnly personOnly = new PersonOnly();
-        personOnly.setName(name);
-        personOnly.setPhone(phone);
+        personOnly.setName(personDTO.getName());
+        personOnly.setPhone(personDTO.getPhone());
         personOnlyRepository.save(personOnly);
 
-        return new PersonDTO(name,phone);
+        return new PersonDTO(personDTO.getName(),personDTO.getPhone());
     }
 }

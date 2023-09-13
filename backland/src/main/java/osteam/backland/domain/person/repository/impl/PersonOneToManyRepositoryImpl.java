@@ -39,8 +39,8 @@ public class PersonOneToManyRepositoryImpl implements PersonOneToManyRepositoryC
     }
 
     @Override
-    public Long updateName(String phone, String newName) {
-        return jpaQueryFactory
+    public void updateName(String phone, String newName) {
+        jpaQueryFactory
                 .update(personOneToMany)
                 .set(personOneToMany.name, newName)
                 .where(personOneToMany.phoneOneToMany.any().phone.eq(phone))

@@ -8,5 +8,5 @@ import java.util.Set;
 public interface PersonOneToOneRepositoryCustom {
     Set<PersonOneToOne> searchByPhoneContaining(String phone);
     Optional<PersonOneToOne> searchByPhone(String phone);
-    Long updateName(String phone, String newName);
+    void updateName(String phone, String newName);
 }

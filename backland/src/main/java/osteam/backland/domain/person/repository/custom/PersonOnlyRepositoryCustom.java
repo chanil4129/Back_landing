@@ -9,5 +9,5 @@ public interface PersonOnlyRepositoryCustom {
     Set<PersonOnly> searchByNameContaining(String name);
     Set<PersonOnly> searchByPhoneContaining(String phone);
     Optional<PersonOnly> searchByPhone(String phone);
-    Long updateName(String phone, String newName);
+    void updateName(String phone, String newName);
 }

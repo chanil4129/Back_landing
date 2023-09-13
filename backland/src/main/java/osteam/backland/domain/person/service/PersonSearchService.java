@@ -115,7 +115,7 @@ public class PersonSearchService {
     }
 
     //**번호로 찾기**
-    public Set<PersonDTO> searchPhonePersonOnlyContaining(String phone) {
+    public Set<PersonDTO> searchPersonOnlyByPhoneContaining(String phone) {
         Set<PersonOnly> personOnlies = personOnlyRepository.searchByPhoneContaining(phone);
 
         return personOnlies.stream()
