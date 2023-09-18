@@ -1,5 +1,6 @@
 package osteam.backland.domain.person.controller.response;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,8 +15,11 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PersonBooksResponse {
+    @Schema(description = "personOnly")
     private List<PersonResponse> personOnly;
+    @Schema(description = "personOneToOne")
     private List<PersonResponse> personOneToOne;
+    @Schema(description = "personOneToMany")
     private List<PersonResponse> personOneToMany;
 
     public void updatePersonOnly(Set<PersonDTO> personOnlyDTOS) {

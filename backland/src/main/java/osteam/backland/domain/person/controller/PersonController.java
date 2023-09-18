@@ -1,5 +1,11 @@
 package osteam.backland.domain.person.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +33,7 @@ import java.util.Set;
  * 검색 - 전체 출력, 이름으로 검색, 전화번호로 검색 구현, 검색은 전부 OneToMany 테이블로 진행.
  */
 @Slf4j
+@Tag(name = "전화번호부", description = "전화번호부 관련 api입니다.")
 @RestController
 @RequestMapping("/person")
 @RequiredArgsConstructor
@@ -51,6 +58,11 @@ public class PersonController {
      * @param personCreateRequest
      * @return 성공 시 이름 반환
      */
+    @Operation(summary = "주소록 등록", description = "이름, 전화번호로 주소록을 만듭니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = String.class))),
+            @ApiResponse(responseCode = "400", description = "bad request operation", content = @Content(schema = @Schema(implementation = String.class)))
+    })
     @PostMapping("/create")
     public String person(@RequestBody @Valid PersonCreateRequest personCreateRequest) {
         log.debug("Controller : Create");
@@ -83,6 +95,11 @@ public class PersonController {
      * 전체 검색 기능
      */
     @GetMapping("/search-all")
+    @Operation(summary = "전체 검색 기능", description = "주소록 전체를 조회합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = PersonBooksResponse.class))),
+            @ApiResponse(responseCode = "400", description = "bad request operation", content = @Content(schema = @Schema(implementation = PersonBooksResponse.class)))
+    })
     public ResponseEntity<PersonBooksResponse> getPeople() {
         log.debug("Controller : Search All");
         Set<PersonDTO> personOnlyDTOS = personSearchService.searchAllPersonOnly();
@@ -103,6 +120,11 @@ public class PersonController {
      * @param request
      */
     @GetMapping("/name")
+    @Operation(summary = "이름으로 검색", description = "이름으로 주소록을 조회합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = PersonBooksResponse.class))),
+            @ApiResponse(responseCode = "400", description = "bad request operation", content = @Content(schema = @Schema(implementation = PersonBooksResponse.class)))
+    })
     public ResponseEntity<PersonBooksResponse> getPeopleByName(@RequestBody @Valid SearchByNameRequest request) {
         log.debug("Controller : Search Name");
         Set<PersonDTO> personOnlyDTOS = personSearchService.searchPersonOnlyByNameContaining(request.getName());
@@ -123,6 +145,11 @@ public class PersonController {
      * @param request
      */
     @GetMapping("/phone")
+    @Operation(summary = "번호로 검색", description = "번호로 주소록을 조회합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = PersonBooksResponse.class))),
+            @ApiResponse(responseCode = "400", description = "bad request operation", content = @Content(schema = @Schema(implementation = PersonBooksResponse.class)))
+    })
     public ResponseEntity<PersonBooksResponse> getPeopleByPhone(@RequestBody @Valid SearchByPhoneRequest request) {
         log.debug("Controller : Saerch Phone");
         Set<PersonDTO> personOnlyDTOS = personSearchService.searchPersonOnlyByPhoneContaining(request.getPhone());
