@@ -28,26 +28,24 @@ public class PersonValidationService {
 
     public Optional<PersonDTO> duplicatePersonOnly(String phone) {
         Optional<PersonOnly> person = personOnlyRepository.searchByPhone(phone);
-        if (person.isPresent()) {
+        return person.map(p -> {
             log.debug("DuplicatePersonOnly");
-            PersonDTO dto = new PersonDTO();
-            dto.setName(person.get().getName());
-            dto.setPhone(person.get().getPhone());
-            return Optional.of(dto);
-        }
-        return Optional.empty();
+            return PersonDTO.builder()
+                    .name(p.getName())
+                    .phone(p.getPhone())
+                    .build();
+        });
     }
 
     public Optional<PersonDTO> duplicatePersonOneToOne(String phone) {
         Optional<PersonOneToOne> person = personOneToOneRepository.searchByPhone(phone);
-        if (person.isPresent()) {
+        return person.map(p -> {
             log.debug("DuplicatePersonOneToOne");
-            PersonDTO dto = new PersonDTO();
-            dto.setName(person.get().getName());
-            dto.setPhone(person.get().getPhoneOneToOne().getPhone());
-            return Optional.of(dto);
-        }
-        return Optional.empty();
+            return PersonDTO.builder()
+                    .name(p.getName())
+                    .phone(p.getPhoneOneToOne().getPhone())
+                    .build();
+        });
     }
 
     public Optional<PersonOneToManyDTO> duplicatePersonOneToMany(String phone) {

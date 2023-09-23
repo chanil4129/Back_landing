@@ -39,12 +39,10 @@ public class PersonSearchService {
         List<PersonOnly> personOnlies = personOnlyRepository.findAll();
 
         return personOnlies.stream()
-                .map(person -> {
-                    PersonDTO dto = new PersonDTO();
-                    dto.setName(person.getName());
-                    dto.setPhone(person.getPhone());
-                    return dto;
-                })
+                .map(person -> PersonDTO.builder()
+                        .name(person.getName())
+                        .phone(person.getPhone())
+                        .build())
                 .collect(Collectors.toSet());
     }
 
@@ -52,12 +50,10 @@ public class PersonSearchService {
         List<PersonOneToOne> personOneToOnes = personOneToOneRepository.findAll();
 
         return personOneToOnes.stream()
-                .map(person -> {
-                    PersonDTO dto = new PersonDTO();
-                    dto.setName(person.getName());
-                    dto.setPhone(person.getPhoneOneToOne().getPhone());
-                    return dto;
-                })
+                .map(person -> PersonDTO.builder()
+                        .name(person.getName())
+                        .phone(person.getPhoneOneToOne().getPhone())
+                        .build())
                 .collect(Collectors.toSet());
     }
 
@@ -72,12 +68,10 @@ public class PersonSearchService {
         Set<PersonOnly> personOnlies = personOnlyRepository.searchByNameContaining(name);
 
         return personOnlies.stream()
-                .map(person -> {
-                    PersonDTO dto = new PersonDTO();
-                    dto.setName(person.getName());
-                    dto.setPhone(person.getPhone());
-                    return dto;
-                })
+                .map(person -> PersonDTO.builder()
+                        .name(person.getName())
+                        .phone(person.getPhone())
+                        .build())
                 .collect(Collectors.toSet());
     }
 
@@ -85,12 +79,10 @@ public class PersonSearchService {
         Set<PhoneOneToOne> phoneOneToOnes = phoneOneToOneRepository.searchByNameContaining(name);
 
         return phoneOneToOnes.stream()
-                .map(phone -> {
-                    PersonDTO dto = new PersonDTO();
-                    dto.setName(phone.getPersonOneToOne().getName());
-                    dto.setPhone(phone.getPhone());
-                    return dto;
-                })
+                .map(phone -> PersonDTO.builder()
+                        .name(phone.getPersonOneToOne().getName())
+                        .phone(phone.getPhone())
+                        .build())
                 .collect(Collectors.toSet());
     }
 
@@ -121,12 +113,10 @@ public class PersonSearchService {
         Set<PersonOnly> personOnlies = personOnlyRepository.searchByPhoneContaining(phone);
 
         return personOnlies.stream()
-                .map(person -> {
-                    PersonDTO dto = new PersonDTO();
-                    dto.setName(person.getName());
-                    dto.setPhone(person.getPhone());
-                    return dto;
-                })
+                .map(person -> PersonDTO.builder()
+                        .name(person.getName())
+                        .phone(person.getPhone())
+                        .build())
                 .collect(Collectors.toSet());
     }
 
@@ -134,12 +124,10 @@ public class PersonSearchService {
         Set<PersonOneToOne> personOneToOnes = personOneToOneRepository.searchByPhoneContaining(phone);
 
         return personOneToOnes.stream()
-                .map(person -> {
-                    PersonDTO dto = new PersonDTO();
-                    dto.setName(person.getName());
-                    dto.setPhone(person.getPhoneOneToOne().getPhone());
-                    return dto;
-                })
+                .map(person -> PersonDTO.builder()
+                        .name(person.getName())
+                        .phone(person.getPhoneOneToOne().getPhone())
+                        .build())
                 .collect(Collectors.toSet());
     }
 
