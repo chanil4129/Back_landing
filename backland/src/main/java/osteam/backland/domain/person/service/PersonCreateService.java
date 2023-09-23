@@ -3,6 +3,7 @@ package osteam.backland.domain.person.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import osteam.backland.domain.person.entity.PersonOneToMany;
 import osteam.backland.domain.person.entity.PersonOneToOne;
 import osteam.backland.domain.person.entity.PersonOnly;
@@ -16,6 +17,7 @@ import osteam.backland.domain.phone.entity.PhoneOneToOne;
 @Service
 @Slf4j
 @RequiredArgsConstructor
+@Transactional
 public class PersonCreateService {
     private final PersonOnlyRepository personOnlyRepository;
     private final PersonOneToOneRepository personOneToOneRepository;
@@ -35,9 +37,9 @@ public class PersonCreateService {
     public PersonDTO oneToOne(PersonDTO personDTO) {
         log.debug("OneToOne 등록");
         PersonOneToOne personOneToOne = new PersonOneToOne();
-        personOneToOne.setName(personDTO.getName());
+        personOneToOne.updateName(personDTO.getName());
         PhoneOneToOne phoneOneToOne = new PhoneOneToOne();
-        phoneOneToOne.setPhone(personDTO.getPhone());
+        phoneOneToOne.updatePhone(personDTO.getPhone());
         personOneToOne.updatePhoneOneToOne(phoneOneToOne);
         personOneToOneRepository.save(personOneToOne);
 
@@ -50,9 +52,9 @@ public class PersonCreateService {
     public PersonDTO oneToMany(PersonDTO personDTO) {
         log.debug("OneToMany 등록");
         PersonOneToMany personOneToMany = new PersonOneToMany();
-        personOneToMany.setName(personDTO.getName());
+        personOneToMany.updateName(personDTO.getName());
         PhoneOneToMany phoneOneToMany = new PhoneOneToMany();
-        phoneOneToMany.setPhone(personDTO.getPhone());
+        phoneOneToMany.updatePhone(personDTO.getPhone());
         personOneToMany.addPhoneOneToMany(phoneOneToMany);
         personOneToManyRepository.save(personOneToMany);
 
@@ -65,8 +67,8 @@ public class PersonCreateService {
     public PersonDTO one(PersonDTO personDTO) {
         log.debug("One 등록");
         PersonOnly personOnly = new PersonOnly();
-        personOnly.setName(personDTO.getName());
-        personOnly.setPhone(personDTO.getPhone());
+        personOnly.updateName(personDTO.getName());
+        personOnly.updatePhone(personDTO.getPhone());
         personOnlyRepository.save(personOnly);
 
         return new PersonDTO(personDTO.getName(),personDTO.getPhone());

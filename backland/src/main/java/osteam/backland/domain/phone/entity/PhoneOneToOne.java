@@ -5,13 +5,13 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 import osteam.backland.domain.person.entity.PersonOneToOne;
 import osteam.backland.global.entity.PrimaryKeyEntity;
 
 @Entity
 @Getter
-@Setter
+@NoArgsConstructor
 public class PhoneOneToOne extends PrimaryKeyEntity {
 
     private String phone;
@@ -19,4 +19,17 @@ public class PhoneOneToOne extends PrimaryKeyEntity {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_user_id", referencedColumnName = "id")
     private PersonOneToOne personOneToOne;
+
+    public PhoneOneToOne(String phone, PersonOneToOne personOneToOne) {
+        this.phone=phone;
+        updatePersonOneToOne(personOneToOne);
+    }
+
+    public void updatePhone(String phone) {
+        this.phone = phone;
+    }
+
+    public void updatePersonOneToOne(PersonOneToOne personOneToOne) {
+        this.personOneToOne = personOneToOne;
+    }
 }
