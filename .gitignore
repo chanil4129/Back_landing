@@ -23,4 +23,5 @@
 hs_err_pid*
 replay_pid*
 backland/src/main/resources/application.properties
+backland/src/test/resources
 *.properties
