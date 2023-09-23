@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import osteam.backland.domain.person.entity.PersonOneToOne;
@@ -12,6 +13,7 @@ import osteam.backland.global.entity.PrimaryKeyEntity;
 @Entity
 @Getter
 @NoArgsConstructor
+@Builder(toBuilder = true)
 public class PhoneOneToOne extends PrimaryKeyEntity {
 
     private String phone;
@@ -23,10 +25,6 @@ public class PhoneOneToOne extends PrimaryKeyEntity {
     public PhoneOneToOne(String phone, PersonOneToOne personOneToOne) {
         this.phone=phone;
         updatePersonOneToOne(personOneToOne);
-    }
-
-    public void updatePhone(String phone) {
-        this.phone = phone;
     }
 
     public void updatePersonOneToOne(PersonOneToOne personOneToOne) {

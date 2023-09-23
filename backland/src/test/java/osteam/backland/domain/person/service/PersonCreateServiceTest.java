@@ -31,6 +31,12 @@ class PersonCreateServiceTest {
     @Mock
     private PersonOneToManyRepository personOneToManyRepository;
 
+    @Mock
+    private PersonUpdateService personUpdateService;
+
+    @Mock
+    private PersonValidationService personValidationService;
+
     @InjectMocks
     private PersonCreateService personCreateService;
 
@@ -43,7 +49,7 @@ class PersonCreateServiceTest {
             PersonDTO mockPersonDTO = new PersonDTO("John", "01011112222");
 
             // when
-            PersonDTO result = personCreateService.oneToOne(mockPersonDTO);
+            PersonDTO result = personCreateService.oneToOneCreate(mockPersonDTO);
 
             // then
             assertThat(result.getName()).isEqualTo(mockPersonDTO.getName());
@@ -57,7 +63,7 @@ class PersonCreateServiceTest {
             PersonDTO mockPersonDTO = new PersonDTO("John", "01011112222");
 
             // when
-            PersonDTO result = personCreateService.oneToMany(mockPersonDTO);
+            PersonDTO result = personCreateService.oneToManyCreate(mockPersonDTO);
 
             // then
             assertThat(result.getName()).isEqualTo(mockPersonDTO.getName());
@@ -71,7 +77,7 @@ class PersonCreateServiceTest {
             PersonDTO mockPersonDTO = new PersonDTO("John", "01011112222");
 
             // when
-            PersonDTO result = personCreateService.one(mockPersonDTO);
+            PersonDTO result = personCreateService.oneCreate(mockPersonDTO);
 
             // then
             assertThat(result.getName()).isEqualTo(mockPersonDTO.getName());

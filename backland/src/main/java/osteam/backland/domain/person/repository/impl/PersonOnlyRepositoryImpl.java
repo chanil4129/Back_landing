@@ -1,6 +1,8 @@
 package osteam.backland.domain.person.repository.impl;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import osteam.backland.domain.person.entity.PersonOnly;
 import osteam.backland.domain.person.repository.custom.PersonOnlyRepositoryCustom;
@@ -16,11 +18,14 @@ import static osteam.backland.domain.person.entity.QPersonOnly.personOnly;
 public class PersonOnlyRepositoryImpl implements PersonOnlyRepositoryCustom {
     private final JPAQueryFactory jpaQueryFactory;
 
+    @PersistenceContext
+    private EntityManager entityManager;
+
     @Override
     public Set<PersonOnly> searchByNameContaining(String name) {
         List<PersonOnly> result = jpaQueryFactory
                 .selectFrom(personOnly)
-                .where(personOnly.name.like("%" + name + "%"))
+                .where(personOnly.name.contains(name))
                 .fetch();
         return new HashSet<>(result);
     }
@@ -29,7 +34,7 @@ public class PersonOnlyRepositoryImpl implements PersonOnlyRepositoryCustom {
     public Set<PersonOnly> searchByPhoneContaining(String phone) {
         List<PersonOnly> result = jpaQueryFactory
                 .selectFrom(personOnly)
-                .where(personOnly.phone.like("%" + phone + "%"))
+                .where(personOnly.phone.contains(phone))
                 .fetch();
         return new HashSet<>(result);
     }
@@ -51,5 +56,7 @@ public class PersonOnlyRepositoryImpl implements PersonOnlyRepositoryCustom {
                 .set(personOnly.name, newName)
                 .where(personOnly.phone.eq(phone))
                 .execute();
+        entityManager.flush();
+        entityManager.clear();
     }
 }

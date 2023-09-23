@@ -25,7 +25,7 @@ import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
-class ValidCheckServiceTest {
+class PersonValidationServiceTest {
     @Mock
     private PersonOnlyRepository personOnlyRepository;
 
@@ -36,7 +36,7 @@ class ValidCheckServiceTest {
     private PersonOneToManyRepository personOneToManyRepository;
 
     @InjectMocks
-    private ValidCheckService validCheckService;
+    private PersonValidationService personValidationService;
 
     @Nested
     @DisplayName("중복 검사")
@@ -52,7 +52,7 @@ class ValidCheckServiceTest {
                 given(personOnlyRepository.searchByPhone(phone)).willReturn(Optional.of(mockPerson));
 
                 //when
-                Optional<PersonDTO> result = validCheckService.duplicatePersonOnly(phone);
+                Optional<PersonDTO> result = personValidationService.duplicatePersonOnly(phone);
 
                 //then
                 assertThat(result).isPresent();
@@ -69,7 +69,7 @@ class ValidCheckServiceTest {
                 given(personOneToOneRepository.searchByPhone(phone)).willReturn(Optional.of(mockPerson));
 
                 //when
-                Optional<PersonDTO> result = validCheckService.duplicatePersonOneToOne(phone);
+                Optional<PersonDTO> result = personValidationService.duplicatePersonOneToOne(phone);
 
                 //then
                 assertThat(result).isPresent();
@@ -86,7 +86,7 @@ class ValidCheckServiceTest {
                 given(personOneToManyRepository.searchByPhone(phone)).willReturn(Optional.of(mockPerson));
 
                 //when
-                Optional<PersonOneToManyDTO> result = validCheckService.duplicatePersonOneToMany(phone);
+                Optional<PersonOneToManyDTO> result = personValidationService.duplicatePersonOneToMany(phone);
 
                 //then
                 assertThat(result).isPresent();
@@ -104,7 +104,7 @@ class ValidCheckServiceTest {
                 given(personOnlyRepository.searchByPhone(phone)).willReturn(Optional.empty());
 
                 //when
-                Optional<PersonDTO> result = validCheckService.duplicatePersonOnly(phone);  // Change the method here
+                Optional<PersonDTO> result = personValidationService.duplicatePersonOnly(phone);  // Change the method here
 
                 //then
                 assertThat(result).isEmpty();
@@ -117,7 +117,7 @@ class ValidCheckServiceTest {
                 given(personOneToOneRepository.searchByPhone(phone)).willReturn(Optional.empty());
 
                 //when
-                Optional<PersonDTO> result = validCheckService.duplicatePersonOneToOne(phone);  // Change the method here
+                Optional<PersonDTO> result = personValidationService.duplicatePersonOneToOne(phone);  // Change the method here
 
                 //then
                 assertThat(result).isEmpty();
@@ -130,7 +130,7 @@ class ValidCheckServiceTest {
                 given(personOneToManyRepository.searchByPhone(phone)).willReturn(Optional.empty());
 
                 //when
-                Optional<PersonOneToManyDTO> result = validCheckService.duplicatePersonOneToMany(phone);
+                Optional<PersonOneToManyDTO> result = personValidationService.duplicatePersonOneToMany(phone);
 
                 //then
                 assertThat(result).isEmpty();

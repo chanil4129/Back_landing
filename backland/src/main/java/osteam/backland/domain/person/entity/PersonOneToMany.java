@@ -4,6 +4,7 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import osteam.backland.domain.phone.entity.PhoneOneToMany;
@@ -15,6 +16,7 @@ import java.util.Set;
 @Entity
 @Getter
 @NoArgsConstructor
+@Builder(toBuilder = true)
 public class PersonOneToMany extends PrimaryKeyEntity {
 
     private String name;
@@ -29,17 +31,16 @@ public class PersonOneToMany extends PrimaryKeyEntity {
 
     public PersonOneToMany(String name, Set<PhoneOneToMany> phones) {
         this.name = name;
-        this.phoneOneToMany = phones;
-        for (PhoneOneToMany phone : phones) {
+        this.phoneOneToMany = new HashSet<>(phones);
+        for (PhoneOneToMany phone : this.phoneOneToMany) {
             phone.updatePersonOneToMany(this);
         }
     }
 
-    public void updateName(String name) {
-        this.name = name;
-    }
-
     public void addPhoneOneToMany(PhoneOneToMany phoneOTM) {
+        if (this.phoneOneToMany == null) {
+            this.phoneOneToMany = new HashSet<>();
+        }
         phoneOneToMany.add(phoneOTM);
         phoneOTM.updatePersonOneToMany(this);
     }

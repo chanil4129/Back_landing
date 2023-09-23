@@ -9,8 +9,11 @@ import org.springframework.transaction.annotation.Transactional;
 import osteam.backland.domain.person.entity.PersonOneToMany;
 import osteam.backland.domain.phone.entity.PhoneOneToMany;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
@@ -24,32 +27,14 @@ class PersonOneToManyRepositoryTest {
 
     @Test
     @Transactional(readOnly = true)
-    public void PersonOneToOneSave() throws Exception{
-        //given
-        PersonOneToMany personOneToMany=new PersonOneToMany();
-        PhoneOneToMany phoneOneToMany1 = new PhoneOneToMany("01022223333", null);
-        PhoneOneToMany phoneOneToMany2 = new PhoneOneToMany("01044445555", null);
-        personOneToMany.updateName("kim");
-        personOneToMany.addPhoneOneToMany(phoneOneToMany1);
-        personOneToMany.addPhoneOneToMany(phoneOneToMany2);
-        //when
-        PersonOneToMany savedPerson = personOneToManyRepository.save(personOneToMany);
-        //then
-        assertThat(savedPerson).isNotNull();
-        assertThat(savedPerson.getName()).isEqualTo("kim");
-        assertThat(savedPerson.getPhoneOneToMany()).contains(phoneOneToMany1, phoneOneToMany2);
-    }
-
-    @Test
-    @Transactional(readOnly = true)
     public void searchByPhoneContaining() throws Exception{
         //given
-        PersonOneToMany personOneToMany=new PersonOneToMany();
-        PhoneOneToMany phoneOneToMany1 = new PhoneOneToMany("01022223333", null);
-        PhoneOneToMany phoneOneToMany2 = new PhoneOneToMany("01044445555", null);
-        personOneToMany.updateName("kim");
-        personOneToMany.addPhoneOneToMany(phoneOneToMany1);
-        personOneToMany.addPhoneOneToMany(phoneOneToMany2);
+        PhoneOneToMany phoneOneToMany1 = PhoneOneToMany.builder().phone("01022223333").build();
+        PhoneOneToMany phoneOneToMany2 = PhoneOneToMany.builder().phone("01044445555").build();
+        PersonOneToMany personOneToMany = PersonOneToMany.builder()
+                .name("kim")
+                .phoneOneToMany(new HashSet<>(Arrays.asList(phoneOneToMany1, phoneOneToMany2)))
+                .build();
         personOneToManyRepository.save(personOneToMany);
         entityManager.flush();
         entityManager.clear();
@@ -64,12 +49,12 @@ class PersonOneToManyRepositoryTest {
     @Transactional(readOnly = true)
     public void searchByPhone() throws Exception{
         //given
-        PersonOneToMany personOneToMany=new PersonOneToMany();
-        PhoneOneToMany phoneOneToMany1 = new PhoneOneToMany("01022223333", null);
-        PhoneOneToMany phoneOneToMany2 = new PhoneOneToMany("01044445555", null);
-        personOneToMany.updateName("kim");
-        personOneToMany.addPhoneOneToMany(phoneOneToMany1);
-        personOneToMany.addPhoneOneToMany(phoneOneToMany2);
+        PhoneOneToMany phoneOneToMany1 = PhoneOneToMany.builder().phone("01022223333").build();
+        PhoneOneToMany phoneOneToMany2 = PhoneOneToMany.builder().phone("01044445555").build();
+        PersonOneToMany personOneToMany = PersonOneToMany.builder()
+                .name("kim")
+                .phoneOneToMany(new HashSet<>(Arrays.asList(phoneOneToMany1, phoneOneToMany2)))
+                .build();
         personOneToManyRepository.save(personOneToMany);
         entityManager.flush();
         entityManager.clear();
@@ -84,21 +69,25 @@ class PersonOneToManyRepositoryTest {
     @Transactional
     public void updateName() throws Exception{
         //given
-        PersonOneToMany personOneToMany=new PersonOneToMany();
-        PhoneOneToMany phoneOneToMany1 = new PhoneOneToMany("01022223333", null);
-        PhoneOneToMany phoneOneToMany2 = new PhoneOneToMany("01044445555", null);
-        personOneToMany.updateName("kim");
-        personOneToMany.addPhoneOneToMany(phoneOneToMany1);
-        personOneToMany.addPhoneOneToMany(phoneOneToMany2);
+        PhoneOneToMany phoneOneToMany1 = PhoneOneToMany.builder().phone("01022223333").build();
+        PhoneOneToMany phoneOneToMany2 = PhoneOneToMany.builder().phone("01044445555").build();
+        PersonOneToMany personOneToMany = PersonOneToMany.builder()
+                .name("kim")
+                .phoneOneToMany(new HashSet<>(Arrays.asList(phoneOneToMany1, phoneOneToMany2)))
+                .build();
         personOneToManyRepository.save(personOneToMany);
         //when
-        personOneToMany.updateName("lee");
+        PersonOneToMany updatedPerson = personOneToMany.toBuilder().name("lee").build();
+        personOneToManyRepository.save(updatedPerson);
         entityManager.flush();
         entityManager.clear();
         //then
         Optional<PersonOneToMany> searched = personOneToManyRepository.searchByPhone("01022223333");
         assertThat(searched.isPresent()).isTrue();
-        assertThat(searched.get()).usingRecursiveComparison().isEqualTo(personOneToMany);
         assertThat(searched.get().getName()).isEqualTo("lee");
+        Set<String> phoneNumbers = searched.get().getPhoneOneToMany().stream()
+                .map(PhoneOneToMany::getPhone)
+                .collect(Collectors.toSet());
+        assertThat(phoneNumbers).contains("01022223333", "01044445555");
     }
 }

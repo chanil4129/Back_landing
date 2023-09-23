@@ -24,7 +24,7 @@ public class ExceptionController {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public CommonExceptionResponse methodArgumentNotValidExceptionHandler(MethodArgumentNotValidException e) {
         return new CommonExceptionResponse(
                 "INVALID_REQUEST",
@@ -33,7 +33,7 @@ public class ExceptionController {
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public CommonExceptionResponse httpMessageNotSearchableExceptionHandler(HttpMessageNotReadableException e) {
         return new CommonExceptionResponse(
                 "INVALID_JSON",

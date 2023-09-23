@@ -1,6 +1,8 @@
 package osteam.backland.domain.person.repository.impl;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import osteam.backland.domain.person.entity.PersonOneToOne;
 import osteam.backland.domain.person.repository.custom.PersonOneToOneRepositoryCustom;
@@ -14,12 +16,15 @@ import static osteam.backland.domain.phone.entity.QPhoneOneToOne.phoneOneToOne;
 public class PersonOneToOneRepositoryImpl implements PersonOneToOneRepositoryCustom {
     private final JPAQueryFactory jpaQueryFactory;
 
+    @PersistenceContext
+    private EntityManager entityManager;
+
     @Override
     public Set<PersonOneToOne> searchByPhoneContaining(String phone) {
         List<PersonOneToOne> results = jpaQueryFactory
                 .selectFrom(personOneToOne)
                 .join(personOneToOne.phoneOneToOne, phoneOneToOne)
-                .where(phoneOneToOne.phone.like("%" + phone + "%"))
+                .where(phoneOneToOne.phone.contains(phone))
                 .fetch();
         return new HashSet<>(results);
     }
@@ -50,6 +55,8 @@ public class PersonOneToOneRepositoryImpl implements PersonOneToOneRepositoryCus
                     .where(personOneToOne.id.eq(personId))
                     .execute();
         }
+        entityManager.flush();
+        entityManager.clear();
 //        jpaQueryFactory
 //                .update(personOneToOne)
 //                .set(personOneToOne.name, newName)

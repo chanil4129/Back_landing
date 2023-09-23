@@ -24,19 +24,6 @@ class PersonOnlyRepositoryTest {
 
     @Test
     @Transactional(readOnly = true)
-    public void PersonOnlySave() throws Exception{
-        //given
-        PersonOnly personOnly = getPersonOnly("test","01012345678");
-        //when
-        PersonOnly savedPerson = personOnlyRepository.save(personOnly);
-        //then
-        assertThat(savedPerson).isNotNull();
-        assertThat(savedPerson.getName()).isEqualTo("test");
-        assertThat(savedPerson.getPhone()).isEqualTo("01012345678");
-    }
-
-    @Test
-    @Transactional(readOnly = true)
     public void searchByNameContaining() throws Exception{
         //given
         PersonOnly personOnly1 = getPersonOnly("test1", "01012345678");
@@ -103,9 +90,9 @@ class PersonOnlyRepositoryTest {
     }
 
     private static PersonOnly getPersonOnly(String name, String phone) {
-        PersonOnly personOnly = new PersonOnly();
-        personOnly.updateName(name);
-        personOnly.updatePhone(phone);
-        return personOnly;
+        return PersonOnly.builder()
+                .name(name)
+                .phone(phone)
+                .build();
     }
 }

@@ -15,7 +15,7 @@ import osteam.backland.domain.person.controller.request.SearchByPhoneRequest;
 import osteam.backland.domain.person.service.PersonCreateService;
 import osteam.backland.domain.person.service.PersonSearchService;
 import osteam.backland.domain.person.service.PersonUpdateService;
-import osteam.backland.domain.person.service.ValidCheckService;
+import osteam.backland.domain.person.service.PersonValidationService;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -42,7 +42,7 @@ public class PersonControllerTest {
     private PersonSearchService personSearchService;
 
     @MockBean
-    private ValidCheckService validCheckService;
+    private PersonValidationService personValidationService;
 
     @Nested
     @DisplayName("예외")
@@ -58,7 +58,7 @@ public class PersonControllerTest {
             mock.perform(post("/person/create")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(longNamePerson))
-                    .andExpect(status().isNotFound());
+                    .andExpect(status().isBadRequest());
         }
 
         @Test
@@ -71,7 +71,7 @@ public class PersonControllerTest {
             mock.perform(post("/person/create")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(longPhonePerson))
-                    .andExpect(status().isNotFound());
+                    .andExpect(status().isBadRequest());
         }
 
         @Test
@@ -84,7 +84,7 @@ public class PersonControllerTest {
             mock.perform(post("/person/create")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(shortPhonePerson))
-                    .andExpect(status().isNotFound());
+                    .andExpect(status().isBadRequest());
         }
 
         @Test
@@ -97,7 +97,7 @@ public class PersonControllerTest {
             mock.perform(post("/person/create")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(nullPerson))
-                    .andExpect(status().isNotFound());
+                    .andExpect(status().isBadRequest());
         }
 
         @Test
@@ -110,7 +110,7 @@ public class PersonControllerTest {
             mock.perform(post("/person/create")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(blankPerson))
-                    .andExpect(status().isNotFound());
+                    .andExpect(status().isBadRequest());
         }
 
         @Test
@@ -120,7 +120,7 @@ public class PersonControllerTest {
             mock.perform(post("/person/create")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(nullInput))
-                    .andExpect(status().isNotFound());
+                    .andExpect(status().isBadRequest());
         }
     }
 

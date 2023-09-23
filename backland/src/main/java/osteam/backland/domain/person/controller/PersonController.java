@@ -20,7 +20,7 @@ import osteam.backland.domain.person.entity.dto.PersonOneToManyDTO;
 import osteam.backland.domain.person.service.PersonCreateService;
 import osteam.backland.domain.person.service.PersonSearchService;
 import osteam.backland.domain.person.service.PersonUpdateService;
-import osteam.backland.domain.person.service.ValidCheckService;
+import osteam.backland.domain.person.service.PersonValidationService;
 
 import java.util.Set;
 
@@ -41,7 +41,7 @@ public class PersonController {
     private final PersonCreateService personCreateService;
     private final PersonUpdateService personUpdateService;
     private final PersonSearchService personSearchService;
-    private final ValidCheckService validCheckService;
+    private final PersonValidationService personValidationService;
 
     @GetMapping("/init")
     public ResponseEntity<String> person() {
@@ -67,27 +67,9 @@ public class PersonController {
     public String person(@RequestBody @Valid PersonCreateRequest personCreateRequest) {
         log.debug("Controller : Create");
         PersonDTO personDTO = new PersonDTO(personCreateRequest.getName(), personCreateRequest.getPhone());
-        if (validCheckService.duplicatePersonOnly(personDTO.getPhone()).isPresent()) {
-            log.debug("PersonOnly 중복 발생");
-            personUpdateService.updateNamePersonOnly(personDTO);
-        }
-        else {
-            personCreateService.one(personDTO);
-        }
-        if (validCheckService.duplicatePersonOneToOne(personDTO.getPhone()).isPresent()) {
-            log.debug("PersonOneToOne 중복 발생");
-            personUpdateService.updateNamePersonOneToOne(personDTO);
-        }
-        else {
-            personCreateService.oneToOne(personDTO);
-        }
-        if (validCheckService.duplicatePersonOneToMany(personDTO.getPhone()).isPresent()) {
-            log.debug("PersonOneToMany 중복 발생");
-            personUpdateService.updateNamePersonOneToMany(personDTO);
-        }
-        else {
-            personCreateService.oneToMany(personDTO);
-        }
+        personCreateService.oneCreate(personDTO);
+        personCreateService.oneToOneCreate(personDTO);
+        personCreateService.oneToManyCreate(personDTO);
         return personCreateRequest.getName();
     }
 
