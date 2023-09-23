@@ -24,13 +24,11 @@ public class PersonCreateService {
     private final PersonOnlyRepository personOnlyRepository;
     private final PersonOneToOneRepository personOneToOneRepository;
     private final PersonOneToManyRepository personOneToManyRepository;
-    private final PersonUpdateService personUpdateService;
-    private final PersonValidationService personValidationService;
 
     public PersonDTO createAll(PersonDTO personDTO) {
-        oneCreate(personDTO);
-        oneToOneCreate(personDTO);
-        oneToManyCreate(personDTO);
+        one(personDTO);
+        oneToOne(personDTO);
+        oneToMany(personDTO);
 
         return personDTO;
     }
@@ -38,7 +36,7 @@ public class PersonCreateService {
     /**
      * Phone과 OneToOne 관계인 person 생성
      */
-    private PersonDTO oneToOne(PersonDTO personDTO) {
+    public PersonDTO oneToOne(PersonDTO personDTO) {
         log.debug("OneToOne 등록");
         PersonOneToOne personOneToOne = PersonOneToOne.builder()
                 .name(personDTO.getName())
@@ -53,7 +51,7 @@ public class PersonCreateService {
     /**
      * Phone과 OneToMany 관계인 person 생성
      */
-    private PersonDTO oneToMany(PersonDTO personDTO) {
+    public PersonDTO oneToMany(PersonDTO personDTO) {
         log.debug("OneToMany 등록");
         PhoneOneToMany phoneOneToMany = PhoneOneToMany.builder()
                 .phone(personDTO.getPhone())
@@ -69,7 +67,7 @@ public class PersonCreateService {
     /**
      * person 하나로만 구성되어 있는 생성
      */
-    private PersonDTO one(PersonDTO personDTO) {
+    public PersonDTO one(PersonDTO personDTO) {
         log.debug("One 등록");
         PersonOnly personOnly = PersonOnly.builder()
                 .name(personDTO.getName())
@@ -77,47 +75,5 @@ public class PersonCreateService {
                 .build();
         personOnlyRepository.save(personOnly);
         return new PersonDTO(personDTO.getName(), personDTO.getPhone());
-    }
-
-    /**
-     * phone 중복 검사 후, 존재하면 update, 아니면 create 하기
-     * @param personDTO
-     * @return
-     */
-    public PersonDTO oneToOneCreate(PersonDTO personDTO) {
-        if (personValidationService.duplicatePersonOneToOne(personDTO.getPhone()).isPresent()) {
-            log.debug("PersonOneToOne 중복 발생");
-            personUpdateService.updateNamePersonOneToOne(personDTO);
-            return personDTO;
-        }
-        return oneToOne(personDTO);
-    }
-
-    /**
-     * phone 중복 검사 후, 존재하면 update, 아니면 create 하기
-     * @param personDTO
-     * @return
-     */
-    public PersonDTO oneToManyCreate(PersonDTO personDTO) {
-        if (personValidationService.duplicatePersonOneToMany(personDTO.getPhone()).isPresent()) {
-            log.debug("PersonOneToMany 중복 발생");
-            personUpdateService.updateNamePersonOneToMany(personDTO);
-            return personDTO;
-        }
-        return oneToMany(personDTO);
-    }
-
-    /**
-     * phone 중복 검사 후, 존재하면 update, 아니면 create 하기
-     * @param personDTO
-     * @return
-     */
-    public PersonDTO oneCreate(PersonDTO personDTO){
-        if (personValidationService.duplicatePersonOnly(personDTO.getPhone()).isPresent()) {
-            log.debug("PersonOnly 중복 발생");
-            personUpdateService.updateNamePersonOnly(personDTO);
-            return personDTO;
-        }
-        return one(personDTO);
     }
 }

@@ -31,13 +31,14 @@ class PersonUpdateServiceTest {
 
     @Nested
     @DisplayName("업데이트")
-    class update{
+    class update {
         @Test
-        public void updateNamePersonOnly() throws Exception{
+        public void updateNamePersonOnly() throws Exception {
             //given
-            PersonDTO personDTO = new PersonDTO();
-            personDTO.setName("kim");
-            personDTO.setPhone("01012345678");
+            PersonDTO personDTO = PersonDTO.builder()
+                    .name("kim")
+                    .phone("01012345678")
+                    .build();
 
             // when
             personUpdateService.updateNamePersonOnly(personDTO);
@@ -49,9 +50,10 @@ class PersonUpdateServiceTest {
         @Test
         public void updateNamePersonOneToOne() throws Exception {
             //given
-            PersonDTO personDTO = new PersonDTO();
-            personDTO.setName("kim");
-            personDTO.setPhone("01012345678");
+            PersonDTO personDTO = PersonDTO.builder()
+                    .name("kim")
+                    .phone("01012345678")
+                    .build();
 
             //when
             personUpdateService.updateNamePersonOneToOne(personDTO);
@@ -63,9 +65,10 @@ class PersonUpdateServiceTest {
         @Test
         public void updateNamePersonOneToMany() throws Exception {
             //given
-            PersonDTO personDTO = new PersonDTO();
-            personDTO.setName("kim");
-            personDTO.setPhone("01012345678");
+            PersonDTO personDTO = PersonDTO.builder()
+                    .name("kim")
+                    .phone("01012345678")
+                    .build();
 
             //when
             personUpdateService.updateNamePersonOneToMany(personDTO);

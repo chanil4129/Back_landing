@@ -64,13 +64,31 @@ public class PersonController {
             @ApiResponse(responseCode = "400", description = "bad request operation", content = @Content(schema = @Schema(implementation = String.class)))
     })
     @PostMapping("/create")
-    public String person(@RequestBody @Valid PersonCreateRequest personCreateRequest) {
+    public ResponseEntity<String> person(@RequestBody @Valid PersonCreateRequest personCreateRequest) {
         log.debug("Controller : Create");
         PersonDTO personDTO = new PersonDTO(personCreateRequest.getName(), personCreateRequest.getPhone());
-        personCreateService.oneCreate(personDTO);
-        personCreateService.oneToOneCreate(personDTO);
-        personCreateService.oneToManyCreate(personDTO);
-        return personCreateRequest.getName();
+        if (personValidationService.duplicatePersonOnly(personDTO.getPhone()).isPresent()) {
+            log.debug("PersonOnly 중복 발생");
+            personUpdateService.updateNamePersonOnly(personDTO);
+        }
+        else {
+            personCreateService.one(personDTO);
+        }
+        if (personValidationService.duplicatePersonOneToOne(personDTO.getPhone()).isPresent()) {
+            log.debug("PersonOneToOne 중복 발생");
+            personUpdateService.updateNamePersonOneToOne(personDTO);
+        }
+        else {
+            personCreateService.oneToOne(personDTO);
+        }
+        if (personValidationService.duplicatePersonOneToMany(personDTO.getPhone()).isPresent()) {
+            log.debug("PersonOneToMany 중복 발생");
+            personUpdateService.updateNamePersonOneToMany(personDTO);
+        }
+        else {
+            personCreateService.oneToMany(personDTO);
+        }
+        return ResponseEntity.ok(personCreateRequest.getName());
     }
 
     /**

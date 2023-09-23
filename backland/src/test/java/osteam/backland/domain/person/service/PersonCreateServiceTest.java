@@ -49,7 +49,7 @@ class PersonCreateServiceTest {
             PersonDTO mockPersonDTO = new PersonDTO("John", "01011112222");
 
             // when
-            PersonDTO result = personCreateService.oneToOneCreate(mockPersonDTO);
+            PersonDTO result = personCreateService.oneToOne(mockPersonDTO);
 
             // then
             assertThat(result.getName()).isEqualTo(mockPersonDTO.getName());
@@ -63,7 +63,7 @@ class PersonCreateServiceTest {
             PersonDTO mockPersonDTO = new PersonDTO("John", "01011112222");
 
             // when
-            PersonDTO result = personCreateService.oneToManyCreate(mockPersonDTO);
+            PersonDTO result = personCreateService.oneToMany(mockPersonDTO);
 
             // then
             assertThat(result.getName()).isEqualTo(mockPersonDTO.getName());
@@ -77,7 +77,7 @@ class PersonCreateServiceTest {
             PersonDTO mockPersonDTO = new PersonDTO("John", "01011112222");
 
             // when
-            PersonDTO result = personCreateService.oneCreate(mockPersonDTO);
+            PersonDTO result = personCreateService.one(mockPersonDTO);
 
             // then
             assertThat(result.getName()).isEqualTo(mockPersonDTO.getName());
